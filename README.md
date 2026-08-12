@@ -294,6 +294,115 @@ curl -X POST "http://127.0.0.1:8000/ask" \
 
 The RAG route requires a populated vector index and a valid DeepSeek configuration. The optional FAQ route uses SQLite as its persistent source of truth and can use Redis as a non-critical positive-match cache.
 
+## Supplier Quality Synthetic Enterprise Corpus
+
+`enterprise-documents/` contains five synthetic controlled documents that model a manufacturing Supplier Quality QMS. They are not real company documents and contain no confidential company data. The corpus is designed to exercise PDF parsing, controlled metadata, chunking, hybrid retrieval, reranking, grounding, and source attribution.
+
+```text
+enterprise-documents/
+├── source/              # Maintainable controlled Markdown sources
+├── pdf/                 # Generated selectable-text PDFs
+├── manifest.json        # Version, checksum, page, chunk, and ingestion status
+└── policy_rules.json    # Machine-readable consistency source of truth
+```
+
+The active controlled rules are:
+
+- `Inspected Count = SUM(total_quantity)` over applicable incoming inspection records.
+- `Defect Count = SUM(rejected_quantity)` over the same records.
+- `Defect Rate = Defect Count / Inspected Count`; a zero denominator is not calculable.
+- Below 2.00% is Acceptable; 2.00% through 5.00% inclusive is Review Required; above 5.00% is Corrective Action Required.
+- Two consecutive quarters at or above 2.00% require management review.
+- A Major deviation requires escalation regardless of aggregate Defect Rate.
+- Period change is current Defect Rate minus previous Defect Rate, reported in percentage points.
+
+### Build and validate the PDFs
+
+Install `reportlab` with the project requirements, then build from the Markdown sources. The builder rejects inconsistent metadata, missing cross-references, or policy-boundary drift before writing PDFs.
+
+```bash
+python scripts/build_enterprise_documents.py
+python scripts/validate_enterprise_documents.py
+```
+
+### Ingest into an isolated collection
+
+The PDF extension must be explicit because the general ingestion command retains its backward-compatible `.txt,.md` default. This corpus uses a separate path and collection, so the existing `data/chroma` knowledge base is not touched.
+
+```bash
+python scripts/ingest.py \
+  --input enterprise-documents/pdf \
+  --extensions .pdf \
+  --persist-path data/supplier_quality/chroma \
+  --collection supplier_quality_demo \
+  --dry-run --verbose
+
+python scripts/ingest.py \
+  --input enterprise-documents/pdf \
+  --extensions .pdf \
+  --persist-path data/supplier_quality/chroma \
+  --collection supplier_quality_demo
+
+python scripts/validate_enterprise_documents.py \
+  --persist-path data/supplier_quality/chroma \
+  --collection supplier_quality_demo \
+  --update-manifest
+```
+
+Chunk IDs are stable for the same relative path and chunk configuration, and Chroma uses upsert. Repeating the same command therefore keeps the logical chunk count stable. If a source changes or produces fewer chunks, use the explicit `--reset` flag against this isolated collection before rebuilding; source-level stale-chunk deletion and version lifecycle are not yet implemented.
+
+### Verify retrieval and the HTTP service
+
+The retrieval smoke test uses the real local embedding model, Chroma collection, BM25 fusion, and locally cached Cross-Encoder reranker. It writes `reports/supplier_quality_retrieval_report.json`.
+
+```bash
+python scripts/smoke_supplier_quality_rag.py
+
+VECTOR_DB_PATH=data/supplier_quality/chroma \
+VECTOR_COLLECTION_NAME=supplier_quality_demo \
+FAQ_ENABLED=false \
+QUERY_REWRITE_ENABLED=false \
+RERANKER_LOCAL_FILES_ONLY=true \
+uvicorn app.api:app --host 127.0.0.1 --port 8011
+
+curl http://127.0.0.1:8011/health
+curl -X POST http://127.0.0.1:8011/ask \
+  -H 'Content-Type: application/json' \
+  -H 'X-Trace-ID: supplier-quality-demo-001' \
+  -d '{"question":"How is supplier defect rate calculated?"}'
+
+# Run all core, boundary, multi-document, and no-evidence HTTP gates.
+python scripts/smoke_supplier_quality_api.py
+```
+
+`POST /ask` sends retrieved context to the configured generation provider. Obtain the required data-boundary authorization before using even synthetic enterprise documents with an external provider. The API returns source and context metadata including `document_id`, `version`, stable `chunk_id`, retrieval score, and `rag_trace_id`. The current whole-document PDF loader does not preserve page or section as structured chunk metadata; headings remain in chunk text.
+
+Run the existing full evaluation framework against the 20-case Supplier Quality dataset only when the external generator and RAGAS provider are authorized and reachable:
+
+```bash
+VECTOR_DB_PATH=data/supplier_quality/chroma \
+VECTOR_COLLECTION_NAME=supplier_quality_demo \
+FAQ_ENABLED=false \
+QUERY_REWRITE_ENABLED=false \
+RERANKER_LOCAL_FILES_ONLY=true \
+python eval/run_eval.py \
+  --dataset evaluation/dataset/supplier_quality_eval_dataset.json \
+  --json-report reports/supplier_quality_evaluation_report.json \
+  --markdown-report reports/supplier_quality_evaluation_report.md
+```
+
+### Reset or remove the demo knowledge safely
+
+To rebuild, use `scripts/ingest.py --reset` only with the explicit isolated path and `supplier_quality_demo` collection shown above. To inspect or delete the demo collection without accepting an arbitrary collection name:
+
+```bash
+python scripts/remove_supplier_quality_index.py
+python scripts/remove_supplier_quality_index.py \
+  --confirm-delete supplier_quality_demo
+```
+
+The removal command deletes only the named demo collection. It does not delete the directory or any existing default collection.
+
 ## Evaluation
 
 Enterprise RAG quality must be measured at retrieval, generation, and operational boundaries rather than judged from isolated demo answers.

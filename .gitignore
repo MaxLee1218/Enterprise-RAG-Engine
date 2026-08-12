@@ -220,6 +220,7 @@ __marimo__/
 # Chroma vector database
 data/chroma/
 data/parents/
+data/supplier_quality/
 data/faq.db
 data/faq.db-shm
 data/faq.db-wal
@@ -234,5 +235,8 @@ models/
 logs/*.jsonl
 # Human-reviewed request failures may also contain private request content
 /eval/badcases.json
+
+# Generated PDF QA intermediates
+tmp/pdfs/
 
 docs/superpowers

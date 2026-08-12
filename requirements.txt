@@ -20,6 +20,7 @@ python-dotenv
 # Document loading
 pypdf
 python-docx
+reportlab
 
 # Web app / demo UI
 streamlit

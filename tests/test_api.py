@@ -256,6 +256,34 @@ def test_normalize_sources_supports_source_dicts_and_objects():
     assert sources[1].text_preview == "object text"
 
 
+def test_normalize_sources_prefers_contexts_to_preserve_evidence_metadata():
+    from app.api import normalize_contexts, normalize_sources
+
+    result = SimpleNamespace(
+        sources=["policy.pdf"],
+        contexts=[
+            {
+                "id": "policy-chunk-7",
+                "text": "Review is required at 2 percent.",
+                "metadata": {
+                    "source": "policy.pdf",
+                    "document_id": "SQM-001",
+                    "version": "2.1",
+                },
+                "score": 0.91,
+            }
+        ],
+    )
+
+    sources = normalize_sources(result)
+    contexts = normalize_contexts(result)
+
+    assert sources[0].metadata["document_id"] == "SQM-001"
+    assert sources[0].metadata["version"] == "2.1"
+    assert sources[0].text_preview == "Review is required at 2 percent."
+    assert contexts[0].chunk_id == "policy-chunk-7"
+
+
 class _FakePipeline:
     def __init__(self, result=None):
         self.result = result or SimpleNamespace(

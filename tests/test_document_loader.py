@@ -6,6 +6,44 @@ from docx import Document as DocxDocument
 from app import document_loader
 
 
+def test_load_document_file_merges_nearest_manifest_metadata(tmp_path):
+    pdf_dir = tmp_path / "pdf"
+    pdf_dir.mkdir()
+    document_path = pdf_dir / "policy.txt"
+    document_path.write_text("controlled policy", encoding="utf-8")
+    (tmp_path / "manifest.json").write_text(
+        """{
+          "documents": [{
+            "filename": "policy.txt",
+            "pdf_file": "pdf/policy.txt",
+            "document_id": "POL-001",
+            "title": "Controlled Policy",
+            "version": "2.0",
+            "classification": "Internal",
+            "chunk_count": 12
+          }]
+        }""",
+        encoding="utf-8",
+    )
+
+    loaded = document_loader.load_document_file(document_path, base_path=pdf_dir)
+
+    assert loaded["metadata"]["document_id"] == "POL-001"
+    assert loaded["metadata"]["title"] == "Controlled Policy"
+    assert loaded["metadata"]["version"] == "2.0"
+    assert loaded["metadata"]["classification"] == "Internal"
+    assert "chunk_count" not in loaded["metadata"]
+
+
+def test_load_document_file_rejects_malformed_nearby_manifest(tmp_path):
+    document_path = tmp_path / "policy.txt"
+    document_path.write_text("controlled policy", encoding="utf-8")
+    (tmp_path / "manifest.json").write_text("not-json", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="invalid document manifest"):
+        document_loader.load_document_file(document_path)
+
+
 def test_load_document_file_returns_text_and_metadata(tmp_path):
     raw_file = tmp_path / "sample.txt"
     raw_file.write_text("  alpha\t\tbeta  ", encoding="utf-8")
@@ -56,6 +94,14 @@ def test_load_document_file_raises_for_unsupported_extension(tmp_path):
 def test_load_document_file_raises_for_empty_text(tmp_path):
     raw_file = tmp_path / "empty.md"
     raw_file.write_text(" \t\n ", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="document is empty"):
+        document_loader.load_document_file(raw_file, base_path=tmp_path)
+
+
+def test_load_document_file_rejects_corrupt_pdf(tmp_path):
+    raw_file = tmp_path / "corrupt.pdf"
+    raw_file.write_bytes(b"not a real pdf")
 
     with pytest.raises(ValueError, match="document is empty"):
         document_loader.load_document_file(raw_file, base_path=tmp_path)

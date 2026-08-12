@@ -194,9 +194,8 @@ def ask(
 
 
 def normalize_sources(result: Any) -> list[Source]:
-    source_items = _as_list(_get_value(result, "sources"))
-    if not source_items:
-        source_items = _as_list(_get_value(result, "contexts"))
+    context_items = _as_list(_get_value(result, "contexts"))
+    source_items = context_items or _as_list(_get_value(result, "sources"))
 
     sources = []
     for index, item in enumerate(source_items, start=1):
@@ -228,6 +227,8 @@ def normalize_contexts(result: Any) -> list[Context]:
         raw_chunk_id = _get_value(item, "chunk_id")
         if raw_chunk_id is None and metadata:
             raw_chunk_id = metadata.get("chunk_id")
+        if raw_chunk_id is None:
+            raw_chunk_id = _get_value(item, "id")
         raw_score = _get_value(item, "score")
         contexts.append(
             Context(

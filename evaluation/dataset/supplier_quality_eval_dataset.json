@@ -1,0 +1,123 @@
+[
+  {
+    "question": "What defect rate is considered acceptable?",
+    "ground_truth": "A Defect Rate below 2.00% is Acceptable.",
+    "reference_contexts": ["Less than 2.00%"],
+    "expected_document_ids": ["SQM-001"]
+  },
+  {
+    "question": "What happens when a supplier's defect rate exceeds 5%?",
+    "ground_truth": "Corrective action and Level 2 escalation are required.",
+    "reference_contexts": ["When Defect Rate exceeds 5%, Corrective Action is Required"],
+    "expected_document_ids": ["SQM-001", "QP-SQ-012"]
+  },
+  {
+    "question": "What happens when a supplier exceeds the review threshold for two consecutive quarters?",
+    "ground_truth": "The supplier requires management review.",
+    "reference_contexts": ["two consecutive quarters requires management review"],
+    "expected_document_ids": ["SQM-001", "QP-SQ-012"]
+  },
+  {
+    "question": "Do major deviations require escalation?",
+    "ground_truth": "Yes. A major deviation requires escalation regardless of aggregate quarterly defect rate.",
+    "reference_contexts": ["major deviation shall be escalated regardless"],
+    "expected_document_ids": ["SQM-001", "POL-SQ-007", "QP-SQ-012"]
+  },
+  {
+    "question": "How is supplier defect rate calculated?",
+    "ground_truth": "SUM(rejected_quantity) divided by SUM(total_quantity).",
+    "reference_contexts": ["Defect Rate = SUM(rejected_quantity) / SUM(total_quantity)"],
+    "expected_document_ids": ["KPI-SQ-002"]
+  },
+  {
+    "question": "What does inspected count mean?",
+    "ground_truth": "It is SUM(total_quantity), the number of individual inspected units, not the number of inspection records.",
+    "reference_contexts": ["Inspected Count = SUM(total_quantity)"],
+    "expected_document_ids": ["KPI-SQ-002", "QP-INSP-004"]
+  },
+  {
+    "question": "When does poor supplier performance need leadership attention?",
+    "ground_truth": "Management review is required after two consecutive quarters at or above the 2.00% review threshold.",
+    "reference_contexts": ["management review"],
+    "expected_document_ids": ["SQM-001", "QP-SQ-012"]
+  },
+  {
+    "question": "How should a 6% defect rate with a major deviation be handled?",
+    "ground_truth": "It requires corrective action, Level 2 escalation, and application of the major-deviation severity override.",
+    "reference_contexts": ["major deviation"],
+    "expected_document_ids": ["SQM-001", "QP-SQ-012", "POL-SQ-007"],
+    "expected_all_document_ids": ["SQM-001", "POL-SQ-007"]
+  },
+  {
+    "question": "How is period-over-period supplier defect trend calculated?",
+    "ground_truth": "Current period Defect Rate minus previous period Defect Rate, reported in percentage points.",
+    "reference_contexts": ["current period Defect Rate - previous period Defect Rate"],
+    "expected_document_ids": ["KPI-SQ-002"]
+  },
+  {
+    "question": "Is a 2.00% defect rate acceptable?",
+    "ground_truth": "No. Exactly 2.00% is Review Required.",
+    "reference_contexts": ["2.00% is Review Required"],
+    "expected_document_ids": ["SQM-001", "KPI-SQ-002", "QP-SQ-012"]
+  },
+  {
+    "question": "How is a 5.00% defect rate classified?",
+    "ground_truth": "Exactly 5.00% is Review Required.",
+    "reference_contexts": ["5.00% is Review Required"],
+    "expected_document_ids": ["SQM-001", "KPI-SQ-002", "QP-SQ-012"]
+  },
+  {
+    "question": "How is a 5.01% defect rate classified?",
+    "ground_truth": "5.01% is Corrective Action Required.",
+    "reference_contexts": ["5.01% is Corrective Action Required"],
+    "expected_document_ids": ["SQM-001", "KPI-SQ-002", "QP-SQ-012"]
+  },
+  {
+    "question": "How is a 1.99% defect rate classified?",
+    "ground_truth": "1.99% is Acceptable.",
+    "reference_contexts": ["1.99% is Acceptable"],
+    "expected_document_ids": ["SQM-001", "KPI-SQ-002", "QP-SQ-012"]
+  },
+  {
+    "question": "What is rejected quantity?",
+    "ground_truth": "It is the number of inspected units that fail applicable acceptance criteria.",
+    "reference_contexts": ["Number of inspected units failing acceptance criteria"],
+    "expected_document_ids": ["KPI-SQ-002", "QP-INSP-004"]
+  },
+  {
+    "question": "What should happen when Inspected Count is zero?",
+    "ground_truth": "Defect Rate is not calculable and must not be reported as 0.00%.",
+    "reference_contexts": ["Defect Rate is not calculable"],
+    "expected_document_ids": ["SQM-001", "KPI-SQ-002"]
+  },
+  {
+    "question": "What evidence must support an escalation decision?",
+    "ground_truth": "The decision must reference applicable inspection records and quality evidence.",
+    "reference_contexts": ["applicable inspection records and quality evidence"],
+    "expected_document_ids": ["QP-SQ-012"]
+  },
+  {
+    "question": "Does a low aggregate defect rate downgrade a critical nonconformance?",
+    "ground_truth": "No. Critical nonconformance requires immediate containment and Level 3 escalation.",
+    "reference_contexts": ["Critical nonconformance requires immediate"],
+    "expected_document_ids": ["POL-SQ-007", "QP-SQ-012"]
+  },
+  {
+    "question": "Can the current knowledge copilot approve or close CAPA records?",
+    "ground_truth": "No. The documents define policy but do not grant the current knowledge copilot authority to create, approve, assign, or close CAPA records.",
+    "reference_contexts": ["does not claim that the current knowledge copilot can create, approve, assign, or close CAPA records"],
+    "expected_document_ids": ["POL-SQ-007"]
+  },
+  {
+    "question": "What is the company's employee vacation policy?",
+    "ground_truth": "Not found in knowledge base.",
+    "should_abstain": true,
+    "expected_no_evidence": true
+  },
+  {
+    "question": "What is the corporate cafeteria reimbursement limit?",
+    "ground_truth": "Not found in knowledge base.",
+    "should_abstain": true,
+    "expected_no_evidence": true
+  }
+]

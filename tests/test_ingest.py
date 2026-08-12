@@ -152,6 +152,7 @@ def test_single_file_ingestion_returns_summary_and_stores_embedded_chunks(tmp_pa
     assert prepared_chunk["metadata"]["filename"] == "RAG Notes.txt"
     assert prepared_chunk["metadata"]["relative_path"] == "RAG Notes.txt"
     assert prepared_chunk["metadata"]["chunk_index"] == 0
+    assert prepared_chunk["metadata"]["chunk_id"] == prepared_chunk["id"]
     assert prepared_chunk["metadata"]["chunk_type"] == "standard"
 
 

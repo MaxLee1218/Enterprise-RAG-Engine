@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "units": {
+    "defect_rate": "decimal ratio displayed as a percentage",
+    "period_change": "percentage points"
+  },
+  "defect_rate": {
+    "numerator": "SUM(rejected_quantity)",
+    "denominator": "SUM(total_quantity)",
+    "zero_denominator": "not_calculable"
+  },
+  "classification": {
+    "acceptable": {
+      "min_inclusive": 0.0,
+      "max_exclusive": 0.02,
+      "required_action": "normal monitoring"
+    },
+    "review_required": {
+      "min_inclusive": 0.02,
+      "max_inclusive": 0.05,
+      "required_action": "supplier review"
+    },
+    "corrective_action_required": {
+      "min_exclusive": 0.05,
+      "required_action": "formal corrective action and Level 2 escalation"
+    }
+  },
+  "boundary_examples": {
+    "1.99%": "acceptable",
+    "2.00%": "review_required",
+    "5.00%": "review_required",
+    "5.01%": "corrective_action_required"
+  },
+  "consecutive_quarter_management_review": {
+    "threshold_min_inclusive": 0.02,
+    "consecutive_periods": 2,
+    "required_action": "management review"
+  },
+  "major_deviation": {
+    "defect_rate_override": true,
+    "minimum_escalation_level": 2,
+    "escalation_required": true
+  },
+  "critical_nonconformance": {
+    "immediate_escalation": true,
+    "minimum_escalation_level": 3
+  },
+  "period_over_period": {
+    "formula": "current_period_defect_rate - previous_period_defect_rate",
+    "unit": "percentage points"
+  },
+  "record_retention_years": 7
+}

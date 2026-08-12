@@ -438,11 +438,17 @@ def _prepare_chunks_for_embedding(
 
     for chunk_index, raw_chunk in enumerate(raw_chunks):
         chunk_text, chunk_metadata = _chunk_text_and_metadata(raw_chunk)
+        stable_chunk_id = _chunk_id(
+            file_stem=file_path.stem,
+            relative_path=relative_path,
+            chunk_index=chunk_index,
+        )
         ingest_metadata = {
             "source": relative_path,
             "filename": file_path.name,
             "relative_path": relative_path,
             "chunk_index": chunk_index,
+            "chunk_id": stable_chunk_id,
             "chunk_type": "standard",
         }
         metadata = {}
@@ -451,11 +457,7 @@ def _prepare_chunks_for_embedding(
         metadata.update(ingest_metadata)
         prepared_chunks.append(
             {
-                "id": _chunk_id(
-                    file_stem=file_path.stem,
-                    relative_path=relative_path,
-                    chunk_index=chunk_index,
-                ),
+                "id": stable_chunk_id,
                 "text": chunk_text,
                 "metadata": _sanitize_metadata(metadata),
             }

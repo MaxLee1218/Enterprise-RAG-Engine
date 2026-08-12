@@ -1,0 +1,346 @@
+{
+  "strategy": "hybrid+reranker",
+  "cases": 20,
+  "positive_cases": 18,
+  "passed": 18,
+  "failed": 0,
+  "retrieval_gate_rate": 1.0,
+  "negative_cases_deferred": 2,
+  "records": [
+    {
+      "query": "What defect rate is considered acceptable?",
+      "expected_document_ids": [
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What happens when a supplier's defect rate exceeds 5%?",
+      "expected_document_ids": [
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "QP-SQ-012",
+        "QP-SQ-012",
+        "POL-SQ-007",
+        "POL-SQ-007",
+        "SQM-001"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What happens when a supplier exceeds the review threshold for two consecutive quarters?",
+      "expected_document_ids": [
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "SQM-001",
+        "QP-SQ-012",
+        "QP-SQ-012",
+        "QP-SQ-012",
+        "POL-SQ-007"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "Do major deviations require escalation?",
+      "expected_document_ids": [
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "QP-INSP-004",
+        "SQM-001",
+        "SQM-001",
+        "QP-SQ-012",
+        "POL-SQ-007"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "How is supplier defect rate calculated?",
+      "expected_document_ids": [
+        "KPI-SQ-002"
+      ],
+      "actual_document_ids": [
+        "SQM-001",
+        "KPI-SQ-002",
+        "SQM-001",
+        "QP-SQ-012",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What does inspected count mean?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "QP-INSP-004"
+      ],
+      "actual_document_ids": [
+        "QP-INSP-004",
+        "QP-INSP-004",
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "When does poor supplier performance need leadership attention?",
+      "expected_document_ids": [
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "QP-SQ-012",
+        "SQM-001",
+        "SQM-001",
+        "SQM-001",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "How should a 6% defect rate with a major deviation be handled?",
+      "expected_document_ids": [
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "SQM-001",
+        "SQM-001",
+        "SQM-001",
+        "POL-SQ-007",
+        "SQM-001"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "How is period-over-period supplier defect trend calculated?",
+      "expected_document_ids": [
+        "KPI-SQ-002"
+      ],
+      "actual_document_ids": [
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "Is a 2.00% defect rate acceptable?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "KPI-SQ-002",
+        "SQM-001",
+        "QP-SQ-012",
+        "QP-SQ-012",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "How is a 5.00% defect rate classified?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002",
+        "SQM-001",
+        "QP-SQ-012"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "How is a 5.01% defect rate classified?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002",
+        "KPI-SQ-002",
+        "QP-SQ-012"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "How is a 1.99% defect rate classified?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "KPI-SQ-002",
+        "KPI-SQ-002",
+        "SQM-001",
+        "KPI-SQ-002",
+        "QP-SQ-012"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What is rejected quantity?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "QP-INSP-004"
+      ],
+      "actual_document_ids": [
+        "QP-INSP-004",
+        "QP-INSP-004",
+        "SQM-001",
+        "QP-INSP-004",
+        "KPI-SQ-002"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What should happen when Inspected Count is zero?",
+      "expected_document_ids": [
+        "KPI-SQ-002",
+        "SQM-001"
+      ],
+      "actual_document_ids": [
+        "QP-INSP-004",
+        "SQM-001",
+        "KPI-SQ-002",
+        "KPI-SQ-002",
+        "QP-INSP-004"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What evidence must support an escalation decision?",
+      "expected_document_ids": [
+        "QP-SQ-012"
+      ],
+      "actual_document_ids": [
+        "QP-SQ-012",
+        "POL-SQ-007",
+        "QP-INSP-004",
+        "POL-SQ-007",
+        "SQM-001"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "Does a low aggregate defect rate downgrade a critical nonconformance?",
+      "expected_document_ids": [
+        "POL-SQ-007",
+        "QP-SQ-012"
+      ],
+      "actual_document_ids": [
+        "POL-SQ-007",
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "SQM-001",
+        "SQM-001"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "Can the current knowledge copilot approve or close CAPA records?",
+      "expected_document_ids": [
+        "POL-SQ-007"
+      ],
+      "actual_document_ids": [
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "POL-SQ-007",
+        "QP-INSP-004",
+        "SQM-001"
+      ],
+      "source_ok": true,
+      "all_sources_ok": true,
+      "fact_ok": true,
+      "passed": true
+    },
+    {
+      "query": "What is the company's employee vacation policy?",
+      "result": "deferred_to_grounded_generation",
+      "passed": null
+    },
+    {
+      "query": "What is the corporate cafeteria reimbursement limit?",
+      "result": "deferred_to_grounded_generation",
+      "passed": null
+    }
+  ]
+}

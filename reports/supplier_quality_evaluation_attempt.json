@@ -1,0 +1,20 @@
+{
+  "status": "incomplete",
+  "dataset": "evaluation/dataset/supplier_quality_eval_dataset.json",
+  "samples": 20,
+  "pipeline_stage_completed": true,
+  "ragas_stage_completed": false,
+  "ragas_scores": null,
+  "interrupted_by_operator": true,
+  "reason": "RAGAS collections evaluation did not complete within the bounded interactive window. At interruption it was waiting in the context_precision scorer during a DeepSeek structured-output retry/response read.",
+  "completed_independent_evidence": {
+    "retrieval_report": "reports/supplier_quality_retrieval_report.json",
+    "retrieval_positive_cases": 18,
+    "retrieval_passed": 18,
+    "http_report": "reports/supplier_quality_api_report.json",
+    "http_cases": 14,
+    "http_passed": 14,
+    "http_abstention_cases": 2,
+    "http_abstention_passed": 2
+  }
+}

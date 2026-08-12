@@ -1,0 +1,226 @@
+{
+  "health": {
+    "status": "ok",
+    "service": "mini-rag-api",
+    "version": "0.1.0"
+  },
+  "cases": 14,
+  "passed": 14,
+  "failed": 0,
+  "abstention_passed": 2,
+  "records": [
+    {
+      "query": "What defect rate is considered acceptable?",
+      "trace_id": "supplier-quality-api-001",
+      "status_code": 200,
+      "answer": "A defect rate below 2.00% is considered Acceptable [1][2].\n\n来源：\n- [1] Supplier_Quality_KPI_Definitions.pdf\n- [2] Supplier_Quality_Manual.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1561.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "What happens when a supplier's defect rate exceeds 5%?",
+      "trace_id": "supplier-quality-api-002",
+      "status_code": 200,
+      "answer": "When a supplier's defect rate exceeds 5%, Corrective Action is Required and Level 2 escalation applies [2].\n\n来源：\n- [2] Quality_Escalation_Procedure.pdf",
+      "source_document_ids": [
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1177.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "What happens when a supplier exceeds the review threshold for two consecutive quarters?",
+      "trace_id": "supplier-quality-api-003",
+      "status_code": 200,
+      "answer": "A supplier exceeding the review threshold for two consecutive quarters requires management review [1]. Exceeding the review threshold means a quarterly Defect Rate greater than or equal to 2.00%, and the two periods must be consecutive calendar or approved fiscal quarters using the same KPI calculation basis [1]. For example, Q1 at 2.80% and Q2 at 3.10% require Level 3 Management Review even though neither rate exceeds 5.00% [4].\n\n来源：\n- [1] Supplier_Quality_Manual.pdf\n- [4] Quality_Escalation_Procedure.pdf",
+      "source_document_ids": [
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1535.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "Do major deviations require escalation?",
+      "trace_id": "supplier-quality-api-004",
+      "status_code": 200,
+      "answer": "Yes, major deviations require escalation. A major deviation shall be escalated regardless of aggregate quarterly defect rate [1]. A confirmed major deviation requires escalation under POL-SQ-007 and QP-SQ-012 [2]. A Major deviation overrides the normal defect-rate-only classification and requires escalation, with the minimum being Level 2 even when the supplier's quarterly Defect Rate is below 2.00% [4]. Major nonconformances must be escalated to Supplier Quality Management [5].\n\n来源：\n- [1] Incoming_Inspection_Procedure.pdf\n- [2] Supplier_Quality_Manual.pdf\n- [4] Quality_Escalation_Procedure.pdf\n- [5] Supplier_Nonconformance_Policy.pdf",
+      "source_document_ids": [
+        "POL-SQ-007",
+        "QP-INSP-004",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1839.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "How is supplier defect rate calculated?",
+      "trace_id": "supplier-quality-api-005",
+      "status_code": 200,
+      "answer": "Supplier defect rate is calculated as Defect Count divided by Inspected Count [5]. Equivalently, Defect Rate = SUM(rejected_quantity) / SUM(total_quantity) over the same applicable record set [2]. If Inspected Count is zero, Defect Rate is not calculable; it is not 0.00% [2]. Defect Rate shall be calculated using aggregated unit quantities, not the number of inspection records [3].\n\n来源：\n- [2] Supplier_Quality_KPI_Definitions.pdf\n- [3] Supplier_Quality_Manual.pdf\n- [5] Supplier_Quality_KPI_Definitions.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1489.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "What does inspected count mean?",
+      "trace_id": "supplier-quality-api-006",
+      "status_code": 200,
+      "answer": "Inspected Count = SUM(total_quantity) for all applicable incoming inspection records [3][4]. It measures individual inspected units, not the number of inspection records [3]. For example, if three records contain total_quantity values of 400, 600, and 1,000, Inspected Count is 2,000 units, not 3 records [5].\n\n来源：\n- [3] Supplier_Quality_KPI_Definitions.pdf\n- [4] Supplier_Quality_Manual.pdf\n- [5] Supplier_Quality_KPI_Definitions.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-INSP-004",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1573.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "When does poor supplier performance need leadership attention?",
+      "trace_id": "supplier-quality-api-007",
+      "status_code": 200,
+      "answer": "Poor supplier performance needs leadership attention for repeated threshold performance, critical nonconformance, or material sourcing risk [1]. Leadership review may also examine supplier performance, inspection history, open quality issues, containment status, corrective action status, delivery or production exposure, and future sourcing risk [3].\n\n来源：\n- [1] Quality_Escalation_Procedure.pdf\n- [3] Supplier_Quality_Manual.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1266.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "How should a 6% defect rate with a major deviation be handled?",
+      "trace_id": "supplier-quality-api-008",
+      "status_code": 200,
+      "answer": "A 6% defect rate exceeds the Corrective Action Threshold of greater than 5.00% [2]. Additionally, a major deviation must be escalated regardless of the supplier's overall quarterly defect rate [5]. Major deviations require escalation under POL-SQ-007 and QP-SQ-012 [1], and must be escalated to Supplier Quality Management [4]. Severity rules operate independently from the rate classification [4].\n\n来源：\n- [1] Supplier_Quality_Manual.pdf\n- [2] Supplier_Quality_Manual.pdf\n- [4] Supplier_Nonconformance_Policy.pdf\n- [5] Supplier_Quality_Manual.pdf",
+      "source_document_ids": [
+        "POL-SQ-007",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1695.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "How is a 1.99% defect rate classified?",
+      "trace_id": "supplier-quality-api-009",
+      "status_code": 200,
+      "answer": "A 1.99% defect rate is classified as Acceptable [1][3][5].\n\n来源：\n- [1] Supplier_Quality_KPI_Definitions.pdf\n- [3] Supplier_Quality_Manual.pdf\n- [5] Quality_Escalation_Procedure.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1327.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "How is a 2.00% defect rate classified?",
+      "trace_id": "supplier-quality-api-010",
+      "status_code": 200,
+      "answer": "A 2.00% defect rate is classified as \"Review Required\" [1][2].\n\n来源：\n- [1] Supplier_Quality_KPI_Definitions.pdf\n- [2] Supplier_Quality_Manual.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1228.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "How is a 5.00% defect rate classified?",
+      "trace_id": "supplier-quality-api-011",
+      "status_code": 200,
+      "answer": "A 5.00% defect rate is classified as \"Review Required\" [1][2].\n\n来源：\n- [1] Supplier_Quality_KPI_Definitions.pdf\n- [2] Supplier_Quality_Manual.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1365.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "How is a 5.01% defect rate classified?",
+      "trace_id": "supplier-quality-api-012",
+      "status_code": 200,
+      "answer": "A 5.01% defect rate is classified as Corrective Action Required [1][2][5].\n\n来源：\n- [1] Supplier_Quality_KPI_Definitions.pdf\n- [2] Supplier_Quality_Manual.pdf\n- [5] Quality_Escalation_Procedure.pdf",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1490.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "What is the company's employee vacation policy?",
+      "trace_id": "supplier-quality-api-013",
+      "status_code": 200,
+      "answer": "Not found in knowledge base.",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "POL-SQ-007",
+        "QP-INSP-004",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1867.0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "query": "What is the corporate cafeteria reimbursement limit?",
+      "trace_id": "supplier-quality-api-014",
+      "status_code": 200,
+      "answer": "Not found in knowledge base.",
+      "source_document_ids": [
+        "KPI-SQ-002",
+        "POL-SQ-007",
+        "QP-SQ-012",
+        "SQM-001"
+      ],
+      "context_count": 5,
+      "latency_ms": 1083.0,
+      "passed": true,
+      "errors": []
+    }
+  ]
+}
