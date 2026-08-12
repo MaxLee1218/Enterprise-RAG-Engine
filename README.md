@@ -233,6 +233,13 @@ Additional retrieval, reranking, parent-child chunking, FAQ, conversation, and e
 
 ## Run the System
 
+### Docker
+
+Build and run the formal non-root HTTP image with an explicit ingestion step
+and a persistent knowledge volume. See [Docker Runtime](docs/docker.md) for the
+complete build, ingestion, health, persistence, reset, and Copilot integration
+workflow.
+
 ### Ingest Documents
 
 Place supported documents under `data/raw/`, then build or update the configured indexes explicitly:
@@ -287,7 +294,6 @@ Ask a question:
 curl -X POST "http://127.0.0.1:8000/ask" \
   -H "Content-Type: application/json" \
   -d '{
-    "session_id": "quality-demo-001",
     "question": "What is the procedure when supplier quality deviation occurs?"
   }'
 ```
@@ -460,11 +466,11 @@ Enterprise RAG requires measurable quality, not only functional demos. Separatin
 - [x] Offline evaluation pipeline
 - [x] Query rewriting
 - [x] Conversation memory
+- [x] Formal non-root Docker runtime
 
 ### Future
 
 - [ ] Online feedback loop
-- [ ] Production Docker deployment
 - [ ] Cloud deployment reference architecture
 
 Roadmap items will be introduced only when concrete quality, scale, security, or operational requirements justify them.

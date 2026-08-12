@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+from uuid import UUID
 
 from app.query_rewriter.llm_rewriter import LLMQueryRewriter
 from tests.asgi_client import asgi_request
@@ -97,25 +98,26 @@ def test_first_and_second_round_use_history_and_preserve_original_question():
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-1", "question": "什么是 Middleware？"},
+            headers={"X-Trace-ID": "session-1"},
+            json={"question": "什么是 Middleware？"},
         )
         second = asgi_request(
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-1", "question": "它为什么可以优化查询？"},
+            headers={"X-Trace-ID": "session-1"},
+            json={"question": "它为什么可以优化查询？"},
         )
     finally:
         teardown_api(api_module, pipeline)
 
     assert first.status_code == 200
-    assert first.json()["query_was_rewritten"] is False
     assert len(store.get_recent_turns("session-1", 5)) == 2
     assert len(pipeline.rewrite_prompts) == 2
     assert "用户：什么是 Middleware？" in pipeline.rewrite_prompts[1]
     assert "Middleware" in pipeline.calls[1]["retrieval_query"]
-    assert second.json()["question"] == "它为什么可以优化查询？"
-    assert second.json()["session_id"] == "session-1"
+    assert pipeline.calls[1]["question"] == "它为什么可以优化查询？"
+    assert second.json()["rag_trace_id"] == "session-1"
 
 
 def test_faq_fast_path_skips_query_rewriter():
@@ -126,13 +128,14 @@ def test_faq_fast_path_skips_query_rewriter():
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-1", "question": "什么是 RAG？"},
+            headers={"X-Trace-ID": "session-1"},
+            json={"question": "什么是 RAG？"},
         )
     finally:
         teardown_api(api_module, pipeline)
 
     assert response.status_code == 200
-    assert response.json()["route"] == "faq"
+    assert response.json()["route"] == "rag"
     assert pipeline.rewrite_prompts == []
 
 
@@ -143,20 +146,22 @@ def test_new_session_cannot_read_old_session_history():
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-1", "question": "什么是 Middleware？"},
+            headers={"X-Trace-ID": "session-1"},
+            json={"question": "什么是 Middleware？"},
         )
         response = asgi_request(
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-2", "question": "它有什么作用？"},
+            headers={"X-Trace-ID": "session-2"},
+            json={"question": "它有什么作用？"},
         )
     finally:
         teardown_api(api_module, pipeline)
 
     assert response.status_code == 200
     assert pipeline.calls[-1]["retrieval_query"] == "它有什么作用？"
-    assert response.json()["query_was_rewritten"] is False
+    assert pipeline.calls[-1]["session_id"] == "session-2"
     assert len(store.get_recent_turns("session-2", 5)) == 1
 
 
@@ -168,10 +173,8 @@ def test_session_keeps_only_five_successful_turns():
                 api_module.app,
                 "POST",
                 "/ask",
-                json={
-                    "session_id": "session-evict",
-                    "question": f"独立问题 {number}",
-                },
+                headers={"X-Trace-ID": "session-evict"},
+                json={"question": f"独立问题 {number}"},
             )
             assert response.status_code == 200
     finally:
@@ -190,7 +193,8 @@ def test_failed_question_is_not_stored():
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-fail", "question": "问题"},
+            headers={"X-Trace-ID": "session-fail"},
+            json={"question": "问题"},
         )
     finally:
         teardown_api(api_module, pipeline)
@@ -198,28 +202,31 @@ def test_failed_question_is_not_stored():
     assert store.get_recent_turns("session-fail", 5) == []
 
 
-def test_blank_question_and_session_are_rejected_and_health_is_unchanged():
+def test_blank_question_is_rejected_and_blank_trace_id_is_generated():
     api_module, _, pipeline = setup_api()
     try:
         blank_question = asgi_request(
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-1", "question": "   "},
+            headers={"X-Trace-ID": "session-1"},
+            json={"question": "   "},
         )
-        blank_session = asgi_request(
+        blank_trace = asgi_request(
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "   ", "question": "问题"},
+            headers={"X-Trace-ID": "   "},
+            json={"question": "问题"},
         )
         health = asgi_request(api_module.app, "GET", "/health")
     finally:
         teardown_api(api_module, pipeline)
     assert blank_question.status_code == 422
-    assert blank_session.status_code == 422
+    assert blank_trace.status_code == 200
+    assert UUID(blank_trace.json()["rag_trace_id"]).version == 4
     assert health.status_code == 200
-    assert pipeline.calls == []
+    assert len(pipeline.calls) == 1
 
 
 def test_query_rewrite_timeout_falls_back_without_failing_request():
@@ -232,12 +239,13 @@ def test_query_rewrite_timeout_falls_back_without_failing_request():
             api_module.app,
             "POST",
             "/ask",
-            json={"session_id": "session-1", "question": "how old is he?"},
+            headers={"X-Trace-ID": "session-1"},
+            json={"question": "how old is he?"},
         )
     finally:
         teardown_api(api_module, pipeline)
 
     assert response.status_code == 200
     assert pipeline.calls[-1]["retrieval_query"] == "how old is he?"
-    assert response.json()["query_was_rewritten"] is False
+    assert pipeline.calls[-1]["session_id"] == "session-1"
     assert len(store.get_recent_turns("session-1", 5)) == 1

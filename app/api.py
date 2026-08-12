@@ -44,19 +44,25 @@ def get_pipeline() -> Any:
     try:
         _pipeline = get_default_dual_path_pipeline(top_k=DEFAULT_TOP_K)
     except MissingAPIKeyError as error:
-        logger.exception("DeepSeek API key is not configured.")
+        logger.error(
+            "DeepSeek API key is not configured.",
+            extra={"error_type": type(error).__name__},
+        )
         raise HTTPException(
             status_code=500,
             detail="DeepSeek API key is not configured.",
         ) from error
     except VectorStoreNotReadyError as error:
-        logger.exception("Vector store is not ready.")
+        logger.warning("Vector store is not ready.")
         raise HTTPException(
             status_code=503,
             detail="Vector store is not ready. Please run scripts/ingest.py first.",
         ) from error
     except Exception as error:
-        logger.exception("Failed to initialize RAG pipeline.")
+        logger.error(
+            "Failed to initialize RAG pipeline.",
+            extra={"error_type": type(error).__name__},
+        )
         raise HTTPException(status_code=500, detail="RAG pipeline failed.") from error
 
     return _pipeline
@@ -168,25 +174,34 @@ def ask(
         return response
     except ValueError as error:
         log_entry["error_type"] = type(error).__name__
-        logger.exception("Invalid RAG request.")
+        logger.warning(
+            "Invalid RAG request.",
+            extra={"error_type": type(error).__name__},
+        )
         raise HTTPException(status_code=400, detail="Invalid RAG request.") from error
     except MissingAPIKeyError as error:
         log_entry["error_type"] = type(error).__name__
-        logger.exception("DeepSeek API key is not configured.")
+        logger.error(
+            "DeepSeek API key is not configured.",
+            extra={"error_type": type(error).__name__},
+        )
         raise HTTPException(
             status_code=500,
             detail="DeepSeek API key is not configured.",
         ) from error
     except VectorStoreNotReadyError as error:
         log_entry["error_type"] = type(error).__name__
-        logger.exception("Vector store is not ready.")
+        logger.warning("Vector store is not ready.")
         raise HTTPException(
             status_code=503,
             detail="Vector store is not ready. Please run scripts/ingest.py first.",
         ) from error
     except Exception as error:
         log_entry["error_type"] = type(error).__name__
-        logger.exception("RAG pipeline failed.")
+        logger.error(
+            "RAG pipeline failed.",
+            extra={"error_type": type(error).__name__},
+        )
         raise HTTPException(status_code=500, detail="RAG pipeline failed.") from error
     finally:
         log_entry["latency_ms"] = int(round((time.perf_counter() - started_at) * 1000))

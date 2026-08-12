@@ -93,17 +93,17 @@ def test_ask_returns_answer_sources_and_latency():
             app,
             "POST",
             "/ask",
-            json={"question": "RAG是什么？", "session_id": "api-answer"},
+            headers={"X-Trace-ID": "api-answer"},
+            json={"question": "RAG是什么？"},
         )
     finally:
         app.dependency_overrides.clear()
 
     assert response.status_code == 200
     body = response.json()
-    assert body["question"] == "RAG是什么？"
     assert body["answer"] == "RAG 是检索增强生成。"
     assert body["route"] == "rag"
-    assert body["faq_id"] is None
+    assert body["rag_trace_id"] == "api-answer"
     assert body["sources"] == [
         {
             "index": 1,
@@ -124,7 +124,7 @@ def test_ask_returns_answer_sources_and_latency():
     ]
 
 
-def test_ask_passes_requested_top_k_to_pipeline():
+def test_ask_rejects_request_top_k_outside_frozen_contract():
     from app.api import app, get_pipeline
 
     fake_pipeline = _FakePipeline()
@@ -134,20 +134,13 @@ def test_ask_passes_requested_top_k_to_pipeline():
             app,
             "POST",
             "/ask",
-            json={"question": "RAG是什么？", "top_k": 3, "session_id": "api-top-k"},
+            json={"question": "RAG是什么？", "top_k": 3},
         )
     finally:
         app.dependency_overrides.clear()
 
-    assert response.status_code == 200
-    assert fake_pipeline.calls == [
-        {
-            "question": "RAG是什么？",
-            "top_k": 3,
-            "retrieval_query": None,
-            "session_id": "api-top-k",
-        }
-    ]
+    assert response.status_code == 422
+    assert fake_pipeline.calls == []
 
 
 def test_ask_rejects_blank_question():
@@ -159,7 +152,7 @@ def test_ask_rejects_blank_question():
             app,
             "POST",
             "/ask",
-            json={"question": "   ", "session_id": "api-blank"},
+            json={"question": "   "},
         )
     finally:
         app.dependency_overrides.clear()
@@ -176,7 +169,7 @@ def test_ask_rejects_invalid_top_k():
             app,
             "POST",
             "/ask",
-            json={"question": "RAG是什么？", "top_k": 21, "session_id": "api-invalid-k"},
+            json={"question": "RAG是什么？", "top_k": 21},
         )
     finally:
         app.dependency_overrides.clear()
@@ -193,7 +186,8 @@ def test_ask_returns_safe_error_when_pipeline_fails():
             app,
             "POST",
             "/ask",
-            json={"question": "RAG是什么？", "session_id": "api-fail"},
+            headers={"X-Trace-ID": "api-fail"},
+            json={"question": "RAG是什么？"},
         )
     finally:
         app.dependency_overrides.clear()
@@ -321,7 +315,8 @@ def test_ask_log_records_effective_parent_child_mode(monkeypatch):
             api_module.app,
             "POST",
             "/ask",
-            json={"question": "What is RAG?", "session_id": "api-log-mode"},
+            headers={"X-Trace-ID": "api-log-mode"},
+            json={"question": "What is RAG?"},
         )
     finally:
         api_module.app.dependency_overrides.clear()
@@ -359,7 +354,7 @@ def test_ask_logs_success(monkeypatch):
             api_module.app,
             "POST",
             "/ask",
-            json={"question": "What is RAG?", "session_id": "api-log-success"},
+            json={"question": "What is RAG?"},
         )
     finally:
         api_module.app.dependency_overrides.clear()
@@ -391,7 +386,7 @@ def test_ask_logs_error_without_sensitive_exception_details(monkeypatch):
             api_module.app,
             "POST",
             "/ask",
-            json={"question": "What is RAG?", "session_id": "api-log-error"},
+            json={"question": "What is RAG?"},
         )
     finally:
         api_module.app.dependency_overrides.clear()
@@ -434,18 +429,16 @@ def test_ask_returns_faq_route_metadata_and_logs_once(monkeypatch):
             api_module.app,
             "POST",
             "/ask",
-            json={"question": "什么是 RAG？", "session_id": "faq-api"},
+            headers={"X-Trace-ID": "faq-api"},
+            json={"question": "什么是 RAG？"},
         )
     finally:
         api_module.app.dependency_overrides.clear()
 
     body = response.json()
     assert response.status_code == 200
-    assert body["route"] == "faq"
-    assert body["faq_id"] == "faq-rag"
-    assert body["faq_score"] == 1.0
-    assert body["faq_match_type"] == "exact"
-    assert body["faq_cache_hit"] is False
+    assert body["route"] == "rag"
+    assert body["rag_trace_id"] == "faq-api"
     assert len(logged_entries) == 1
     assert logged_entries[0]["route"] == "faq"
     assert logged_entries[0]["faq_id"] == "faq-rag"
@@ -470,7 +463,8 @@ def test_ask_bounds_question_fields_in_request_log(monkeypatch):
             api_module.app,
             "POST",
             "/ask",
-            json={"question": long_question, "session_id": "api-bounded-log"},
+            headers={"X-Trace-ID": "api-bounded-log"},
+            json={"question": long_question},
         )
     finally:
         api_module.app.dependency_overrides.clear()
