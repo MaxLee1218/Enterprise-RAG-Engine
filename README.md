@@ -327,7 +327,7 @@ python scripts/validate_enterprise_documents.py
 
 ### Ingest into an isolated collection
 
-The PDF extension must be explicit because the general ingestion command retains its backward-compatible `.txt,.md` default. This corpus uses a separate path and collection, so the existing `data/chroma` knowledge base is not touched.
+The PDF extension must be explicit because the general ingestion command retains its backward-compatible `.txt,.md` default. The application defaults to this corpus's isolated `data/supplier_quality/chroma` path and `supplier_quality_demo` collection; the earlier `data/chroma` knowledge base remains untouched and can still be selected explicitly with environment variables.
 
 ```bash
 python scripts/ingest.py \

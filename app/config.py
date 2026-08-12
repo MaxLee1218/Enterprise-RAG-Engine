@@ -136,9 +136,11 @@ def _parse_unit_interval_env(name: str, default: float) -> float:
     return parsed
 
 
-VECTOR_DB_PATH = _parse_nonblank_env("VECTOR_DB_PATH", "data/chroma")
+VECTOR_DB_PATH = _parse_nonblank_env(
+    "VECTOR_DB_PATH", "data/supplier_quality/chroma"
+)
 VECTOR_COLLECTION_NAME = _parse_nonblank_env(
-    "VECTOR_COLLECTION_NAME", "mini_rag_chunks"
+    "VECTOR_COLLECTION_NAME", "supplier_quality_demo"
 )
 DEFAULT_TOP_K = 5
 CHUNK_MODE = _parse_choice_env(

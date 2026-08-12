@@ -69,8 +69,8 @@ def reload_config(monkeypatch, **env_values):
 def test_config_uses_defaults_without_api_keys(monkeypatch):
     config = reload_config(monkeypatch)
 
-    assert config.VECTOR_DB_PATH == "data/chroma"
-    assert config.VECTOR_COLLECTION_NAME == "mini_rag_chunks"
+    assert config.VECTOR_DB_PATH == "data/supplier_quality/chroma"
+    assert config.VECTOR_COLLECTION_NAME == "supplier_quality_demo"
     assert config.DEFAULT_TOP_K == 5
     assert config.CHUNK_MODE == "standard"
     assert config.PARENT_CHUNK_SIZE == 1000
