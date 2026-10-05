@@ -39,6 +39,7 @@ redis
 
 # Utilities
 tiktoken
+Pillow
 
 # Evaluation
 ragas

@@ -14,6 +14,7 @@ index, or locally downloaded models.
 | Runtime identity | non-root UID/GID `10001:10001` |
 | Health | `GET /health`; process health only, not index/model/provider readiness |
 | Ask | `POST /ask` with `{"question": "..."}` |
+| Browser demo | `GET /demo`; read-only client for the existing ask contract |
 | Ingestion | `python scripts/ingest.py ...`; always an explicit offline operation |
 | Persistent data | `/app/data` |
 | Read-only documents | `/app/enterprise-documents` |
@@ -23,6 +24,32 @@ scripts. Development, evaluation, report-generation, test, and document-build
 dependencies remain in `requirements.txt` and are intentionally excluded from
 the service image. The builder installs PyTorch from its official CPU wheel
 index so a CPU service image does not acquire CUDA runtime packages.
+
+## Docker Compose quick start
+
+The checked-in `compose.yaml` defines the API, a persistent Redis cache, the
+shared RAG data volume, and an explicit one-shot ingestion profile:
+
+```bash
+cp .env.example .env
+docker compose --profile tools run --rm ingest
+docker compose up -d api
+curl --fail http://127.0.0.1:8000/health
+```
+
+Open `http://127.0.0.1:8000/demo` for the read-only browser client. Compose
+binds the API only to loopback by default. The ingestion service mounts
+`enterprise-documents/` read-only and exits after building the named collection;
+it is never part of normal API startup.
+
+Stop the running services without deleting their named volumes:
+
+```bash
+docker compose down
+```
+
+Deleting volumes is a separate destructive operation and is intentionally not
+part of the quick-start workflow.
 
 ## Data model
 

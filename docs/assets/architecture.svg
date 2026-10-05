@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">Enterprise RAG Engine architecture</title>
+  <desc id="desc">Explicit offline ingestion and FAQ-first online retrieval paths in a modular monolith.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07111f"/><stop offset="1" stop-color="#11152b"/></linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#0284c7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0l10 5-10 5z" fill="#64748b"/></marker>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .label{font-size:14px;font-weight:750;fill:#f8fafc}.small{font-size:12px;fill:#94a3b8}.lane{font-size:13px;font-weight:800;letter-spacing:1.5px}
+    </style>
+  </defs>
+  <rect width="1400" height="800" rx="28" fill="url(#bg)"/>
+  <text x="64" y="64" class="sans" font-size="30" font-weight="780" fill="#f8fafc">Two explicit paths. One traceable contract.</text>
+  <text x="64" y="94" class="sans" font-size="15" fill="#94a3b8">A local-first modular monolith with read-only query execution and deliberate index writes.</text>
+
+  <rect x="50" y="132" width="1300" height="205" rx="20" fill="#0a1728" stroke="#1e3a52"/>
+  <text x="76" y="165" class="sans lane" fill="#38bdf8">OFFLINE INGESTION · WRITE PATH</text>
+  <g class="sans">
+    <g transform="translate(76 205)"><rect width="170" height="78" rx="13" fill="#10243a" stroke="#1d4f6f"/><text x="85" y="33" text-anchor="middle" class="label">Documents</text><text x="85" y="55" text-anchor="middle" class="small">PDF · DOCX · MD · TXT</text></g>
+    <g transform="translate(294 205)"><rect width="170" height="78" rx="13" fill="#10243a" stroke="#1d4f6f"/><text x="85" y="33" text-anchor="middle" class="label">Load + validate</text><text x="85" y="55" text-anchor="middle" class="small">provenance preserved</text></g>
+    <g transform="translate(512 205)"><rect width="170" height="78" rx="13" fill="#10243a" stroke="#1d4f6f"/><text x="85" y="33" text-anchor="middle" class="label">Chunk</text><text x="85" y="55" text-anchor="middle" class="small">standard or parent-child</text></g>
+    <g transform="translate(730 205)"><rect width="170" height="78" rx="13" fill="#10243a" stroke="#1d4f6f"/><text x="85" y="33" text-anchor="middle" class="label">Embed</text><text x="85" y="55" text-anchor="middle" class="small">Sentence Transformers</text></g>
+    <g transform="translate(948 205)"><rect width="170" height="78" rx="13" fill="#10243a" stroke="#1d4f6f"/><text x="85" y="33" text-anchor="middle" class="label">Persist</text><text x="85" y="55" text-anchor="middle" class="small">Chroma + SQLite</text></g>
+    <g transform="translate(1166 205)"><rect width="142" height="78" rx="13" fill="url(#cyan)"/><text x="71" y="33" text-anchor="middle" font-size="14" font-weight="800" fill="#02131f">Index ready</text><text x="71" y="55" text-anchor="middle" font-size="12" fill="#082f49">explicit operation</text></g>
+  </g>
+  <g stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"><path d="M246 244h40"/><path d="M464 244h40"/><path d="M682 244h40"/><path d="M900 244h40"/><path d="M1118 244h40"/></g>
+
+  <rect x="50" y="363" width="1300" height="380" rx="20" fill="#0a1223" stroke="#35285f"/>
+  <text x="76" y="397" class="sans lane" fill="#a78bfa">ONLINE QUERY · READ PATH</text>
+  <g class="sans">
+    <g transform="translate(76 454)"><rect width="150" height="76" rx="13" fill="#191733" stroke="#51438a"/><text x="75" y="34" text-anchor="middle" class="label">POST /ask</text><text x="75" y="55" text-anchor="middle" class="small">validated request</text></g>
+    <g transform="translate(274 454)"><rect width="170" height="76" rx="13" fill="#191733" stroke="#51438a"/><text x="85" y="34" text-anchor="middle" class="label">FAQ router</text><text x="85" y="55" text-anchor="middle" class="small">SQLite + optional Redis</text></g>
+    <g transform="translate(492 454)"><rect width="170" height="76" rx="13" fill="#191733" stroke="#51438a"/><text x="85" y="34" text-anchor="middle" class="label">Query rewrite</text><text x="85" y="55" text-anchor="middle" class="small">safe original fallback</text></g>
+    <g transform="translate(710 430)"><rect width="196" height="124" rx="13" fill="#191733" stroke="#51438a"/><text x="98" y="31" text-anchor="middle" class="label">Hybrid retrieval</text><rect x="17" y="48" width="70" height="43" rx="8" fill="#101d33"/><text x="52" y="75" text-anchor="middle" class="small">Dense</text><rect x="109" y="48" width="70" height="43" rx="8" fill="#101d33"/><text x="144" y="75" text-anchor="middle" class="small">BM25</text><text x="98" y="110" text-anchor="middle" class="small">normalized fusion</text></g>
+    <g transform="translate(954 454)"><rect width="164" height="76" rx="13" fill="#191733" stroke="#51438a"/><text x="82" y="34" text-anchor="middle" class="label">Rerank + prompt</text><text x="82" y="55" text-anchor="middle" class="small">bounded evidence</text></g>
+    <g transform="translate(1166 454)"><rect width="142" height="76" rx="13" fill="url(#violet)"/><text x="71" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#130b28">DeepSeek</text><text x="71" y="55" text-anchor="middle" font-size="12" fill="#241044">grounded generation</text></g>
+  </g>
+  <g stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"><path d="M226 492h40"/><path d="M444 492h40"/><path d="M662 492h40"/><path d="M906 492h40"/><path d="M1118 492h40"/></g>
+  <path d="M359 530v91h807" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 7" marker-end="url(#arrow)"/>
+  <text x="385" y="610" class="sans small" fill="#34d399">FAQ hit bypasses model retrieval path</text>
+  <rect x="858" y="650" width="450" height="56" rx="12" fill="#0d2530" stroke="#246b70"/>
+  <text x="1083" y="675" text-anchor="middle" class="sans label">Answer + contexts + sources + latency + trace ID</text>
+  <text x="1083" y="695" text-anchor="middle" class="sans small">sources are reconstructed from retrieved evidence</text>
+</svg>

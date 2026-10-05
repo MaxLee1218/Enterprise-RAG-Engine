@@ -1,6 +1,61 @@
+name: enterprise-rag-engine
+
 services:
+  api:
+    build:
+      context: .
+    image: enterprise-rag-engine:local
+    environment:
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-v4-flash}
+      VECTOR_DB_PATH: /app/data/supplier_quality/chroma
+      VECTOR_COLLECTION_NAME: supplier_quality_demo
+      FAQ_DB_PATH: /app/data/faq.db
+      RAG_PARENT_STORE_PATH: /app/data/parents/parents.sqlite3
+      REDIS_URL: redis://redis:6379/0
+      RERANKER_LOCAL_FILES_ONLY: ${RERANKER_LOCAL_FILES_ONLY:-false}
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - rag-data:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ingest:
+    build:
+      context: .
+    image: enterprise-rag-engine:local
+    profiles: ["tools"]
+    command:
+      - python
+      - scripts/ingest.py
+      - --input
+      - /app/enterprise-documents/pdf
+      - --extensions
+      - .pdf
+      - --persist-path
+      - /app/data/supplier_quality/chroma
+      - --collection
+      - supplier_quality_demo
+    volumes:
+      - rag-data:/app/data
+      - ./enterprise-documents:/app/enterprise-documents:ro
+
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     restart: unless-stopped
+
+volumes:
+  rag-data:
+  redis-data:

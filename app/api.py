@@ -8,11 +8,13 @@ from collections.abc import Mapping
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.responses import HTMLResponse
 
 from app.config import DEFAULT_TOP_K
 from app.conversation.models import ConversationTurn
 from app.conversation.store import ConversationStore
 from app.dependencies import get_conversation_store
+from app.demo import demo_page
 from app.generator import MissingAPIKeyError
 from app.logging_utils import RequestLog, log_request
 from app.pipeline_factory import (
@@ -75,6 +77,12 @@ def health() -> HealthResponse:
         service="mini-rag-api",
         version=API_VERSION,
     )
+
+
+@app.get("/demo", response_class=HTMLResponse, include_in_schema=False)
+def demo() -> HTMLResponse:
+    """Serve a read-only browser client for the existing ask contract."""
+    return demo_page()
 
 
 @app.post("/ask", response_model=AskResponse)

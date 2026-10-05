@@ -59,3 +59,16 @@ def test_runtime_dependency_set_excludes_development_and_evaluation_tools() -> N
     assert "pytest" not in requirements
     assert "ragas" not in requirements
     assert "streamlit" not in requirements
+
+
+def test_compose_defines_api_cache_and_explicit_ingestion() -> None:
+    compose = (PROJECT_ROOT / "compose.yaml").read_text(encoding="utf-8")
+
+    assert "  api:" in compose
+    assert "  redis:" in compose
+    assert "  ingest:" in compose
+    assert 'profiles: ["tools"]' in compose
+    assert "./enterprise-documents:/app/enterprise-documents:ro" in compose
+    assert '"127.0.0.1:8000:8000"' in compose
+    assert "REDIS_URL: redis://redis:6379/0" in compose
+    assert "rag-data:/app/data" in compose

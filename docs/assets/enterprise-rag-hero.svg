@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-labelledby="title desc">
+  <title id="title">Enterprise RAG Engine</title>
+  <desc id="desc">A portfolio banner showing evidence flowing through hybrid retrieval into a grounded answer.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/><stop offset=".55" stop-color="#0b1730"/><stop offset="1" stop-color="#171333"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#38bdf8"/><stop offset=".5" stop-color="#34d399"/><stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="26"/></filter>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    </style>
+  </defs>
+  <rect width="1400" height="520" rx="30" fill="url(#bg)"/>
+  <circle cx="1180" cy="80" r="170" fill="#8b5cf6" opacity=".14" filter="url(#glow)"/>
+  <circle cx="200" cy="460" r="190" fill="#0ea5e9" opacity=".12" filter="url(#glow)"/>
+  <g opacity=".12" stroke="#94a3b8">
+    <path d="M0 104h1400M0 208h1400M0 312h1400M0 416h1400"/><path d="M175 0v520M350 0v520M525 0v520M700 0v520M875 0v520M1050 0v520M1225 0v520"/>
+  </g>
+  <g transform="translate(72 72)">
+    <rect width="195" height="32" rx="16" fill="#0c2c3f" stroke="#38bdf8" stroke-opacity=".4"/>
+    <circle cx="18" cy="16" r="4" fill="#34d399"/>
+    <text x="31" y="21" class="sans" font-size="12" font-weight="700" letter-spacing="1.2" fill="#bae6fd">TRACEABLE KNOWLEDGE</text>
+    <text x="0" y="104" class="sans" font-size="58" font-weight="760" letter-spacing="-2.4" fill="#f8fafc">Enterprise RAG Engine</text>
+    <text x="0" y="151" class="sans" font-size="23" fill="#cbd5e1">Answers with evidence, not just confidence.</text>
+    <text x="0" y="205" class="sans" font-size="16" fill="#94a3b8">Hybrid retrieval · Cross-Encoder reranking · Grounded sources · Offline evaluation</text>
+    <rect y="252" width="136" height="45" rx="12" fill="url(#accent)"/>
+    <text x="68" y="280" text-anchor="middle" class="sans" font-size="14" font-weight="800" fill="#04111d">696 TESTS</text>
+    <rect x="148" y="252" width="168" height="45" rx="12" fill="#111f36" stroke="#334155"/>
+    <text x="232" y="280" text-anchor="middle" class="sans" font-size="14" font-weight="700" fill="#dbeafe">18/18 RETRIEVAL</text>
+    <rect x="328" y="252" width="138" height="45" rx="12" fill="#111f36" stroke="#334155"/>
+    <text x="397" y="280" text-anchor="middle" class="sans" font-size="14" font-weight="700" fill="#dbeafe">14/14 API</text>
+    <text x="0" y="344" class="mono" font-size="13" fill="#64748b">local-first · modular monolith · explicit ingestion</text>
+  </g>
+  <g transform="translate(850 70)">
+    <rect width="470" height="380" rx="22" fill="#07101d" stroke="#334155"/>
+    <circle cx="28" cy="25" r="5" fill="#fb7185"/><circle cx="46" cy="25" r="5" fill="#fbbf24"/><circle cx="64" cy="25" r="5" fill="#34d399"/>
+    <text x="92" y="30" class="mono" font-size="12" fill="#64748b">grounded-answer.trace</text>
+    <path d="M0 50h470" stroke="#334155"/>
+    <g class="mono" font-size="13">
+      <text x="26" y="86" fill="#38bdf8">QUESTION</text><text x="26" y="112" fill="#e2e8f0">How is supplier defect rate calculated?</text>
+      <text x="26" y="155" fill="#a78bfa">RETRIEVAL</text>
+      <rect x="26" y="168" width="418" height="43" rx="8" fill="#111c2e"/>
+      <text x="40" y="195" fill="#34d399">KPI-SQ-002</text><text x="155" y="195" fill="#94a3b8">hybrid + reranker</text><text x="390" y="195" fill="#f8fafc">[1]</text>
+      <text x="26" y="250" fill="#34d399">GROUNDED ANSWER</text>
+      <text x="26" y="278" fill="#e2e8f0">Defect Rate = rejected quantity /</text>
+      <text x="26" y="301" fill="#e2e8f0">inspected quantity over the same records.</text>
+      <path d="M26 326h418" stroke="#1e293b"/>
+      <text x="26" y="355" fill="#64748b">trace_id</text><text x="104" y="355" fill="#cbd5e1">supplier-quality-api-005</text>
+    </g>
+  </g>
+</svg>
